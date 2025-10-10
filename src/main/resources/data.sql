@@ -1,0 +1,50 @@
+---- Sample data for GeoTrackr
+---- Note: Passwords are BCrypt encoded "password123"
+--
+---- Insert Users
+--INSERT INTO users (username, password, email, full_name, role, active, created_at, updated_at)
+--VALUES
+--    ('admin', '$2a$10$rZJ9z3YqQqZ5X8YJqY5J1e5YqJ9z3YqQqZ5X8YJqY5J1e5YqJ9z3Y', 'admin@geotrackr.com', 'Admin User', 'ADMIN', true, NOW(), NOW()),
+--    ('john_doe', '$2a$10$rZJ9z3YqQqZ5X8YJqY5J1e5YqJ9z3YqQqZ5X8YJqY5J1e5YqJ9z3Y', 'john@example.com', 'John Doe', 'USER', true, NOW(), NOW()),
+--    ('jane_smith', '$2a$10$rZJ9z3YqQqZ5X8YJqY5J1e5YqJ9z3YqQqZ5X8YJqY5J1e5YqJ9z3Y', 'jane@example.com', 'Jane Smith', 'USER', true, NOW(), NOW());
+--
+---- Insert Assets
+--INSERT INTO assets (name, type, description, current_latitude, current_longitude, last_update, active, owner_id, created_at, updated_at)
+--VALUES
+--    ('Delivery Van 1', 'VEHICLE', 'Main delivery vehicle', 22.5726, 88.3639, NOW(), true, 2, NOW(), NOW()),
+--    ('Delivery Agent A', 'PERSON', 'Delivery person for Zone A', 22.5726, 88.3639, NOW(), true, 2, NOW(), NOW()),
+--    ('Mobile Device 101', 'DEVICE', 'Tracking device for field staff', 22.5726, 88.3639, NOW(), true, 3, NOW(), NOW()),
+--    ('Package #12345', 'PACKAGE', 'High-value package', 22.5726, 88.3639, NOW(), true, 3, NOW(), NOW());
+--
+---- Insert Geofences (Circular)
+--INSERT INTO geofences (name, description, type, center_latitude, center_longitude, radius, alert_type, active, created_by, created_at, updated_at)
+--VALUES
+--    ('Office Zone', 'Main office perimeter', 'CIRCULAR', 22.5726, 88.3639, 500, 'BOTH', true, 1, NOW(), NOW()),
+--    ('Warehouse Area', 'Warehouse security zone', 'CIRCULAR', 22.5800, 88.3700, 1000, 'BOTH', true, 1, NOW(), NOW()),
+--    ('Delivery Hub', 'Central delivery hub', 'CIRCULAR', 22.5650, 88.3600, 750, 'ENTRY', true, 1, NOW(), NOW()),
+--    ('Restricted Zone', 'High security area', 'CIRCULAR', 22.5900, 88.3800, 300, 'BOTH', true, 1, NOW(), NOW());
+--
+---- Insert Geofences (Polygonal)
+--INSERT INTO geofences (name, description, type, polygon_coordinates, alert_type, active, created_by, created_at, updated_at)
+--VALUES
+--    ('City Center Zone', 'Downtown delivery area', 'POLYGONAL',
+--     '[[22.5700,88.3600],[22.5750,88.3600],[22.5750,88.3680],[22.5700,88.3680]]',
+--     'BOTH', true, 1, NOW(), NOW());
+--
+---- Insert Sample Geofence Events
+--INSERT INTO geofence_events (asset_id, geofence_id, event_type, latitude, longitude, timestamp, notification_sent)
+--VALUES
+--    (1, 1, 'ENTER', 22.5726, 88.3639, NOW() - INTERVAL '2 hours', true),
+--    (1, 1, 'EXIT', 22.5750, 88.3650, NOW() - INTERVAL '1 hour', true),
+--    (2, 2, 'ENTER', 22.5800, 88.3700, NOW() - INTERVAL '30 minutes', true),
+--    (3, 3, 'ENTER', 22.5650, 88.3600, NOW() - INTERVAL '15 minutes', false);
+--
+---- Create indexes for better performance
+--CREATE INDEX IF NOT EXISTS idx_assets_owner ON assets(owner_id);
+--CREATE INDEX IF NOT EXISTS idx_assets_active ON assets(active);
+--CREATE INDEX IF NOT EXISTS idx_geofences_active ON geofences(active);
+--CREATE INDEX IF NOT EXISTS idx_geofence_events_asset ON geofence_events(asset_id);
+--CREATE INDEX IF NOT EXISTS idx_geofence_events_geofence ON geofence_events(geofence_id);
+--CREATE INDEX IF NOT EXISTS idx_geofence_events_timestamp ON geofence_events(timestamp);
+--CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+--CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
