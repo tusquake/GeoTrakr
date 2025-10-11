@@ -16,17 +16,10 @@ public class GeoTrackrApplication {
 		String dburl = System.getenv("DATABASE_URL");
 		if (dburl != null && dburl.startsWith("postgresql://")) {
 			String jdbcUrl = dburl.replace("postgresql://", "jdbc:postgresql://");
-
-			// Handle missing .render.com suffix if needed
-			if (!jdbcUrl.contains(".render.com")) {
-				jdbcUrl = jdbcUrl.replace(
-						"dpg-d3l749j3fgac73abrvo0-a/",
-						"dpg-d3l749j3fgac73abrvo0-a.oregon-postgres.render.com/"
-				);
-			}
-
 			System.setProperty("spring.datasource.url", jdbcUrl);
 			System.out.println("✅ Converted DATABASE_URL → " + jdbcUrl);
+		} else {
+			System.out.println("⚠️ DATABASE_URL not found in environment");
 		}
 	}
 }
