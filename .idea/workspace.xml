@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3fcdc7a1-71a4-4294-a431-747c556fe5dd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/GeoTrackrApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/config/OpenAPIConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/controller/AssetController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/controller/GeofenceController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/controller/GeofenceEventController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/controller/LocationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/AssetCreateDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/GeofenceCreateDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/JwtResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/LocationUpdateDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/dto/UserRegistrationDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/entity/Asset.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/entity/Geofence.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/entity/GeofenceEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/entity/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/repository/AssetRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/repository/GeofenceEventRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/repository/GeofenceRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/security/CustomUserDetailsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/security/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/security/JwtTokenProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/service/AssetService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/service/GeofenceEventService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/service/GeofenceService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tushar/geotrackr/service/LocationTrackingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/tushar/geotrackr/GeotrackrApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "tusquake"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/tusquake/GeoTrakr.git",
+    "accountId": "3bc29c99-6b1b-449c-a825-b55ed9da4442"
+  }
+}]]></component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="33qgLAusPFZUGbNi0s6B4dUAuSQ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.GeoTrackrApplication.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "E:/skill-up/geotrackr"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="GeoTrackrApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.tushar.geotrackr.GeoTrackrApplication" />
+      <module name="geotrackr" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.tushar.geotrackr.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.GeoTrackrApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3fcdc7a1-71a4-4294-a431-747c556fe5dd" name="Changes" comment="" />
+      <created>1760049958062</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760049958062</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with PostGIS
+  postgres:
+    image: postgis/postgis:15-3.3-alpine
+    container_name: geotrackr-postgres
+    environment:
+      POSTGRES_DB: geotrackr
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - geotrackr-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application
+  geotrackr-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: geotrackr-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Spring Profile
+      SPRING_PROFILES_ACTIVE: dev
+
+      # Database Connection
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/geotrackr
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+      # CORS Configuration
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
+
+      # JWT Configuration (optional - uses defaults from application.yml)
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      JWT_EXPIRATION: 86400000
+
+      # Geofencing Configuration (optional - uses defaults)
+      GEOFENCE_CHECK_INTERVAL: 5000
+      GEOFENCE_DISTANCE_UNIT: KILOMETERS
+    ports:
+      - "8080:8080"
+    networks:
+      - geotrackr-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # PgAdmin for Database Management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: geotrackr-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@geotrackr.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    networks:
+      - geotrackr-network
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+networks:
+  geotrackr-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  pgadmin_data:

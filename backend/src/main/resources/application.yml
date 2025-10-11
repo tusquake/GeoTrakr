@@ -1,0 +1,148 @@
+# Default configuration (common to all profiles)
+spring:
+  application:
+    name: geotrackr
+  
+  jpa:
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisPG10Dialect
+        format_sql: true
+    open-in-view: false
+
+# Server configuration
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+
+# Geofencing Configuration
+geofence:
+  check-interval: ${GEOFENCE_CHECK_INTERVAL:5000} # Check interval in milliseconds
+  distance-unit: ${GEOFENCE_DISTANCE_UNIT:KILOMETERS} # KILOMETERS or MILES
+
+# API Documentation
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# CORS configuration
+cors:
+  allowed:
+    origins: ${CORS_ORIGINS:http://localhost:5173}
+
+# Logging
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+---
+# Local development profile (default)
+spring:
+  config:
+    activate:
+      on-profile: default
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/geotrackr
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    com.tushar.geotrackr: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+# Docker development profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/geotrackr}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    com.tushar.geotrackr: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+
+---
+# Production profile (for Render)
+spring:
+  config:
+    activate:
+      on-profile: production
+  
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+# Production logging (less verbose)
+logging:
+  level:
+    root: INFO
+    com.tushar.geotrackr: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    org.hibernate: WARN
+
+# Additional production security
+management:
+  endpoint:
+    health:
+      show-details: never
