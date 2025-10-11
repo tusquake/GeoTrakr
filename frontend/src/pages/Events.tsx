@@ -166,15 +166,19 @@ export default function Events() {
                                 cx="50%"
                                 cy="50%"
                                 labelLine={false}
-                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                label={(props) => {
+                                    const { name, percent } = props as any; // cast to any to fix TS typing
+                                    return `${name}: ${(percent ?? 0 * 100).toFixed(0)}%`;
+                                }}
                                 outerRadius={80}
                                 fill="#8884d8"
                                 dataKey="value"
                             >
-                                {pieData.map((entry, index) => (
+                                {pieData.map((_, index) => (
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
+
                             <Tooltip
                                 contentStyle={{
                                     backgroundColor: '#1e293b',
