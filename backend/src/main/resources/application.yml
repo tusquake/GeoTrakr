@@ -7,7 +7,7 @@ spring:
     defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.spatial.dialect.postgis.PostgisPG10Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     open-in-view: false
 
@@ -21,12 +21,12 @@ server:
 # JWT Configuration
 jwt:
   secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours
 
 # Geofencing Configuration
 geofence:
-  check-interval: ${GEOFENCE_CHECK_INTERVAL:5000} # Check interval in milliseconds
-  distance-unit: ${GEOFENCE_DISTANCE_UNIT:KILOMETERS} # KILOMETERS or MILES
+  check-interval: ${GEOFENCE_CHECK_INTERVAL:5000} # in ms
+  distance-unit: ${GEOFENCE_DISTANCE_UNIT:KILOMETERS}
 
 # API Documentation
 springdoc:
@@ -58,18 +58,19 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
 ---
+
 # Local development profile (default)
 spring:
   config:
     activate:
       on-profile: default
-  
+
   datasource:
     url: jdbc:postgresql://localhost:5432/geotrackr
     username: postgres
     password: 12345678
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -84,18 +85,19 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 ---
+
 # Docker development profile
 spring:
   config:
     activate:
       on-profile: dev
-  
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/geotrackr}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -109,16 +111,17 @@ logging:
     org.hibernate.SQL: DEBUG
 
 ---
-# Production profile (for Render)
+
+# Production profile (Render)
 spring:
   config:
     activate:
       on-profile: production
-  
+
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DB_USERNAME:}
-    password: ${DB_PASSWORD:}
+    # Render DATABASE_URL is like: postgresql://user:pass@host:port/db
+    # Convert it automatically using a system property (see code snippet below)
+    url: ${JDBC_DATABASE_URL:${DATABASE_URL}}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
@@ -126,7 +129,7 @@ spring:
       connection-timeout: 20000
       idle-timeout: 300000
       max-lifetime: 1200000
-  
+
   jpa:
     hibernate:
       ddl-auto: update
