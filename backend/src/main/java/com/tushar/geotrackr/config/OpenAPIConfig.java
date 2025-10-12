@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
                 description = "Real-time Geofencing and Location Tracking System",
                 contact = @Contact(
                         name = "Tushar",
-                        email = "tushar@example.com"
+                        email = "sethtushar111@gmail.com"
                 ),
                 license = @License(
                         name = "MIT License",

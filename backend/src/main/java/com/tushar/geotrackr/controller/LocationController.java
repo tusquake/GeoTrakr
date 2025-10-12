@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/location")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Location Tracking", description = "Real-time Location Tracking APIs")
 public class LocationController {

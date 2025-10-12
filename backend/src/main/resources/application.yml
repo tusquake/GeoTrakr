@@ -135,6 +135,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  websocket:
+        message-size-limit: 8192
+        send-buffer-size-limit: 8192
+        send-time-limit: 20000
 
 logging:
   level:
@@ -143,8 +147,13 @@ logging:
     org.springframework.web: WARN
     org.springframework.security: WARN
     org.hibernate: WARN
+    org.springframework.web.socket: DEBUG
+    org.springframework.messaging: DEBUG
 
 management:
   endpoint:
     health:
       show-details: never
+
+
+

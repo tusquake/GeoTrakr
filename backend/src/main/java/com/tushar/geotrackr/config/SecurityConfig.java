@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/swagger-ui/**",
                                 "/api-docs/**",
-                                "/h2-console/**"
+                                "/h2-console/**",
+                                "/ws/**"
                         ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -89,6 +90,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:5173",
+                "http://127.0.0.1:5500",
+                "https://tusquake.github.io/Mobile-Geotkr",
                 "https://geotrackr-frontend.onrender.com"
         ));
 

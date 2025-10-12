@@ -3,7 +3,10 @@ import { format } from 'date-fns';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Activity, Map as MapIcon, Package, TrendingUp, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, Polygon, Popup, TileLayer } from 'react-leaflet';
+import { toast } from 'sonner';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { assetsApi, eventsApi, geofencesApi, type Asset, type Geofence } from '../services/api';
 import { useUIStore } from '../store/useStore';
 
@@ -36,16 +39,72 @@ const StatCard = ({ icon: Icon, title, value, trend, color }: any) => (
 );
 
 export default function Dashboard() {
+  const [mapKey, setMapKey] = useState(0);
+  const [lastUpdateTime, setLastUpdateTime] = useState(new Date());
+
+  const {
+    isConnected,
+    locationUpdates,
+    geofenceEvents
+  } = useWebSocket();
+
   const { selectedAsset, selectAsset } = useUIStore();
 
-  const { data: assetsData } = useQuery({
+  const { data: assetsData, refetch: refetchAssets } = useQuery({
     queryKey: ['assets'],
     queryFn: async () => {
       const response = await assetsApi.getAll();
       return response.data.data;
     },
-    refetchInterval: 5000, // Refresh every 5 seconds
   });
+
+  // Handle real-time location updates
+  useEffect(() => {
+    if (locationUpdates.length > 0) {
+      const latestUpdate = locationUpdates[locationUpdates.length - 1];
+      console.log('🔄 New location update:', latestUpdate);
+
+      // Refetch assets to get latest positions from backend
+      refetchAssets();
+      
+      // Update last update time
+      setLastUpdateTime(new Date());
+      
+      // Force map re-render to show new position
+      setMapKey(prev => prev + 1);
+
+      // Show notification for location update
+      toast.info(`📍 ${latestUpdate.assetName} location updated`, {
+        description: `Lat: ${latestUpdate.latitude.toFixed(4)}, Lon: ${latestUpdate.longitude.toFixed(4)}`,
+        duration: 3000,
+      });
+    }
+  }, [locationUpdates, refetchAssets]);
+
+  // Handle real-time geofence events with notifications
+  useEffect(() => {
+    if (geofenceEvents.length > 0) {
+      const latestEvent = geofenceEvents[geofenceEvents.length - 1];
+      console.log('🚨 New geofence event:', latestEvent);
+
+      if (latestEvent.eventType === 'ENTER') {
+        toast.success(`✅ ${latestEvent.assetName} entered ${latestEvent.geofenceName}`, {
+          description: `at ${format(new Date(latestEvent.timestamp), 'HH:mm:ss')}`,
+          duration: 5000,
+        });
+      } else {
+        toast.info(`⬅️ ${latestEvent.assetName} exited ${latestEvent.geofenceName}`, {
+          description: `at ${format(new Date(latestEvent.timestamp), 'HH:mm:ss')}`,
+          duration: 5000,
+        });
+      }
+
+      // Vibrate on mobile if supported
+      if ('vibrate' in navigator) {
+        navigator.vibrate(200);
+      }
+    }
+  }, [geofenceEvents]);
 
   const { data: geofencesData } = useQuery({
     queryKey: ['geofences'],
@@ -74,14 +133,31 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Real-time geofencing monitoring</p>
+          <div className="flex items-center gap-2">
+            <p className="text-muted-foreground">Real-time geofencing monitoring</p>
+            <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
+              isConnected 
+                ? 'text-green-600 bg-green-100 dark:bg-green-900/30' 
+                : 'text-red-600 bg-red-100 dark:bg-red-900/30'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'
+              }`} />
+              {isConnected ? 'Live' : 'Disconnected'}
+            </div>
+          </div>
         </div>
         <div className="text-sm text-muted-foreground">
-          Last updated: {format(new Date(), 'MMM dd, yyyy HH:mm:ss')}
+          <div>Last updated: {format(lastUpdateTime, 'MMM dd, yyyy HH:mm:ss')}</div>
+          {locationUpdates.length > 0 && (
+            <div className="text-xs text-green-600 mt-1">
+              {locationUpdates.length} location updates received
+            </div>
+          )}
         </div>
       </div>
 
@@ -120,6 +196,7 @@ export default function Dashboard() {
         {/* Map */}
         <div className="lg:col-span-2 bg-card border border-border rounded-lg overflow-hidden h-[600px]">
           <MapContainer
+            key={mapKey}
             center={defaultCenter}
             zoom={13}
             className="h-full w-full"
@@ -212,6 +289,9 @@ export default function Dashboard() {
                             Updated: {format(new Date(asset.lastUpdate), 'HH:mm:ss')}
                           </p>
                         )}
+                        <div className="text-xs mt-2 font-mono text-muted-foreground">
+                          {asset.currentLatitude.toFixed(6)}, {asset.currentLongitude.toFixed(6)}
+                        </div>
                       </div>
                     </Popup>
                   </Marker>
@@ -230,25 +310,28 @@ export default function Dashboard() {
               <div
                 key={asset.id}
                 onClick={() => selectAsset(asset.id)}
-                className={`p-3 rounded-lg cursor-pointer transition-all ${selectedAsset === asset.id
+                className={`p-3 rounded-lg cursor-pointer transition-all ${
+                  selectedAsset === asset.id
                     ? 'bg-primary/20 border border-primary'
                     : 'bg-muted hover:bg-muted/80'
-                  }`}
+                }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm">{asset.name}</h3>
                     <p className="text-xs text-muted-foreground">{asset.type}</p>
                     {asset.lastUpdate && (
-                      <p className="text-xs text-green-500 mt-1">
+                      <p className="text-xs text-green-500 mt-1 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                         {format(new Date(asset.lastUpdate), 'HH:mm:ss')}
                       </p>
                     )}
                   </div>
-                  <div className={`w-2 h-2 rounded-full ${asset.currentLatitude && asset.currentLongitude
+                  <div className={`w-2 h-2 rounded-full ${
+                    asset.currentLatitude && asset.currentLongitude
                       ? 'bg-green-500 animate-pulse'
                       : 'bg-gray-500'
-                    }`} />
+                  }`} />
                 </div>
                 {asset.currentLatitude && asset.currentLongitude && (
                   <div className="mt-2 text-xs text-muted-foreground font-mono">
@@ -265,6 +348,39 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Recent Events Section */}
+      {geofenceEvents.length > 0 && (
+        <div className="bg-card border border-border rounded-lg p-6">
+          <h2 className="text-xl font-bold mb-4">Recent Geofence Events</h2>
+          <div className="space-y-2 max-h-[300px] overflow-y-auto">
+            {geofenceEvents.slice().reverse().slice(0, 10).map((event, index) => (
+              <div
+                key={`${event.eventId}-${index}`}
+                className={`p-3 rounded-lg border-l-4 ${
+                  event.eventType === 'ENTER'
+                    ? 'bg-green-50 dark:bg-green-900/20 border-green-500'
+                    : 'bg-orange-50 dark:bg-orange-900/20 border-orange-500'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm">
+                      {event.eventType === 'ENTER' ? '✅ Entered' : '⬅️ Exited'}: {event.geofenceName}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Asset: {event.assetName}
+                    </p>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {format(new Date(event.timestamp), 'HH:mm:ss')}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
