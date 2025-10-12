@@ -48,7 +48,9 @@ export const useWebSocket = (): UseWebSocketReturn => {
     // Create WebSocket client
     const client = new Client({
       // Use SockJS for fallback support
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws/location'),
+      webSocketFactory: () => new SockJS(
+        `${import.meta.env.VITE_API_URL.replace('/api', '')}/ws/location`
+      ),
 
       // Connection configuration
       connectHeaders: {
