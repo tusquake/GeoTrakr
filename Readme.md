@@ -4,6 +4,24 @@
 
 GeoTrackr is a production-ready geofencing and location tracking system built with Spring Boot and React. The application enables real-time monitoring of assets within defined geographical boundaries and provides automated alerts when boundaries are crossed.
 
+## Application
+
+1. Dashboard
+<img width="1863" height="1072" alt="image" src="https://github.com/user-attachments/assets/9638b188-7d09-45d9-a097-ebbf8b67034d" />
+
+2. Assets
+<img width="1920" height="1071" alt="image" src="https://github.com/user-attachments/assets/8f260bca-a333-418a-9b0f-b7994179e102" />
+
+3. Geofences
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/11ad3dcf-e841-4d09-a89d-65dd03769ff2" />
+  
+4. Events
+<img width="1893" height="1080" alt="image" src="https://github.com/user-attachments/assets/d79e245c-d7bf-4384-a883-48b06cdeb86a" />
+
+Device Tracking
+<img width="1894" height="1080" alt="image" src="https://github.com/user-attachments/assets/a87197c9-ef40-4547-83e7-6505903dac62" />
+
+
 ## Key Features
 
 ### Backend Capabilities
